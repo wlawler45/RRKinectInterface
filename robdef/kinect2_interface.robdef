@@ -1,0 +1,86 @@
+service sensors.kinect2
+
+option version 0.9
+
+struct PointCloud
+#	field uint64 n_points
+#	field single[] points
+#	field uint8[] RGB_data
+	field single[] points
+end
+
+
+
+struct KinectBody
+	
+    constant uint8 HAND_LEFT 0
+    constant uint8 HAND_RIGHT 1
+    
+	field uint64 tracking_id
+    field uint8 tracked
+    field double[] lean
+	field double[] joint_positions
+	field double[] joint_orientations
+	field uint8[] joint_tracking_state
+	field uint8[] hand_state
+	field uint8[] hand_confidence
+	
+end
+
+
+
+struct KinectMultiSource
+    field uint8 Color
+    field uint8 Depth
+    field uint8 Infrared
+    field uint8 Body
+    field uint8 BodyIndex 
+    field uint8 LongExposureInfrared
+end struct
+
+struct Image
+	field int32 width
+	field int32 height
+	field int32 channels
+	field uint8[] data
+end struct
+
+struct DepthImage
+	field int32 width
+	field int32 height
+	field int32 channels
+	field uint16[] data
+end struct
+
+struct ImageHeader
+	field int32 width
+	field int32 height
+	field int32 channels
+	field uint8 step
+end struct
+
+object Kinect
+    
+	
+    function uint8 EnableSensors(KinectMultiSource s)
+    function uint8 DisableSensors()
+    function KinectMultiSource SensorsEnabled()
+    	
+	function ImageHeader getColorImageHeader()
+	function ImageHeader getDepthImageHeader()
+	function PointCloud getPointCloud()
+	function Image getCurrentColorImage()
+	function DepthImage getCurrentDepthImage()
+	function DepthImage getCurrentInfraredImage()
+	function Image getCurrentBodyIndexImage()
+	function DepthImage getCurrentLongExposureInfraredImage()
+	
+    function uint64[6] getTrackedBodyIDs()
+	function KinectBody getDetectedBody(int32 index)
+	#function double[3] getGroundPlaneOrientation
+	
+	#function uint8 EnablePointCloudGeneration(uint8 with_color)
+	#function uint8 DisablePointCloudGeneration()
+	#function PointCloud getCurrentPointCloud()
+	
+end object
