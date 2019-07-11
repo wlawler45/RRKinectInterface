@@ -2,14 +2,18 @@ service sensors.kinect2
 
 option version 0.9
 
+namedarray point3f
+    field single x
+	field single y
+	field single z
+end
+
 struct PointCloud
 #	field uint64 n_points
 #	field single[] points
 #	field uint8[] RGB_data
-	field single[] points
+	field point3f[] points
 end
-
-
 
 struct KinectBody
 	

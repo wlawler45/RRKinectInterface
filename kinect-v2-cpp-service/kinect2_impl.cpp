@@ -392,8 +392,8 @@ RR_INTRUSIVE_PTR<sensors::kinect2::PointCloud > Kinect2_impl::getPointCloud()
 	boost::lock_guard<boost::mutex> guard(mtx_);
 	
 	RR_INTRUSIVE_PTR<sensors::kinect2::PointCloud > pointcloud(new sensors::kinect2::PointCloud());
-	RR::RRArrayPtr<float> cloud = RR::AllocateRRArray<float>(depth_image_width*depth_image_height * 3);
-	float* cloud_ptr = &cloud->at(0);
+	RR::RRNamedArrayPtr<sensors::kinect2::point3f> cloud = RR::AllocateEmptyRRNamedArray<sensors::kinect2::point3f>(depth_image_width*depth_image_height);
+	sensors::kinect2::point3f* cloud_ptr = &cloud->at(0);
 
 	
 	for (int y = 0; y < depth_image_height; y++) {
@@ -410,13 +410,10 @@ RR_INTRUSIVE_PTR<sensors::kinect2::PointCloud > Kinect2_impl::getPointCloud()
 			
 			coordinate_mapper->MapDepthPointToCameraSpace(depthSpacePoint, depth, &cameraSpacePoint);
 			
-			*cloud_ptr = cameraSpacePoint.X;
-			cloud_ptr++;
-			*cloud_ptr= cameraSpacePoint.Y;
-			cloud_ptr++;
-			*cloud_ptr= cameraSpacePoint.Z;
-			cloud_ptr++;
-			
+			cloud_ptr->s.x = cameraSpacePoint.X;
+			cloud_ptr->s.y = cameraSpacePoint.Y;			
+			cloud_ptr->s.y = cameraSpacePoint.Z;			
+			cloud_ptr++;			
 		}
 		
 	}
